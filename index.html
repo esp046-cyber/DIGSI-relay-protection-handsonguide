@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIGSI Protection Relay Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            padding: 1%;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 12px 1%;
+            border-radius: 8px;
+            margin-bottom: 1%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1%;
+            margin-bottom: 1%;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        
+        .tab {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .tab.active {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e3c72;
+            font-weight: 600;
+        }
+        
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .tab.active:hover {
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 14px 1%;
+            margin-bottom: 1%;
+        }
+        
+        h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
+        h3 {
+            font-size: 14px;
+            margin: 12px 0 8px;
+            color: #87ceeb;
+        }
+        
+        p, li {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        
+        ul {
+            margin-left: 18px;
+        }
+        
+        .step {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 1%;
+            border-radius: 6px;
+            margin: 8px 0;
+            border-left: 3px solid #ffd700;
+        }
+        
+        .warning {
+            background: rgba(255, 165, 0, 0.2);
+            border-left: 3px solid #ffa500;
+            padding: 10px 1%;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+        
+        .info {
+            background: rgba(135, 206, 235, 0.2);
+            border-left: 3px solid #87ceeb;
+            padding: 10px 1%;
+            border-radius: 6px;
+            margin: 8px 0;
+        }
+        
+        .code {
+            background: #1a1a2e;
+            color: #0ff;
+            padding: 8px 1%;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DIGSI Protection Relay Software Guide</h1>
+            <div class="subtitle">Hands-on Reference for DIGSI 4.87 & DIGSI 5</div>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('overview')">Overview</div>
+            <div class="tab" onclick="showTab('digsi4')">DIGSI 4.87</div>
+            <div class="tab" onclick="showTab('digsi5')">DIGSI 5</div>
+            <div class="tab" onclick="showTab('config')">Configuration</div>
+            <div class="tab" onclick="showTab('testing')">Testing</div>
+            <div class="tab" onclick="showTab('iec61850')">IEC 61850</div>
+            <div class="tab" onclick="showTab('comtrade')">COMTRADE</div>
+            <div class="tab" onclick="showTab('logic')">Logic CFC</div>
+            <div class="tab" onclick="showTab('protocols')">Protocols</div>
+            <div class="tab" onclick="showTab('timesync')">Time Sync</div>
+            <div class="tab" onclick="showTab('troubleshoot')">Troubleshooting</div>
+        </div>
+        
+        <div id="overview" class="content active">
+            <div class="card">
+                <h2>Software Overview</h2>
+                <p>DIGSI (Digital Signaling and Information) is Siemens' comprehensive tool for parameterization, commissioning, and diagnostics of SIPROTEC protection relays.</p>
+                
+                <h3>Key Differences</h3>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>DIGSI 4.87</th>
+                        <th>DIGSI 5</th>
+                    </tr>
+                    <tr>
+                        <td>Supported Devices</td>
+                        <td>SIPROTEC 4 (7SJ, 7SA, 7SD, 7UT)</td>
+                        <td>SIPROTEC 5 (7SJ80, 7SA87, 7SD86)</td>
+                    </tr>
+                    <tr>
+                        <td>Interface</td>
+                        <td>Classic Windows UI</td>
+                        <td>Modern ribbon-based UI</td>
+                    </tr>
+                    <tr>
+                        <td>Communication</td>
+                        <td>Serial, Ethernet</td>
+                        <td>Ethernet, IEC 61850</td>
+                    </tr>
+                    <tr>
+                        <td>File Format</td>
+                        <td>.dsc, .dig</td>
+                        <td>.digsi</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>Hardware Requirements</h2>
+                <div class="info">
+                    <strong>Minimum System Requirements:</strong><br>
+                    • Windows 7/8/10/11 (64-bit)<br>
+                    • 4 GB RAM (8 GB recommended)<br>
+                    • 10 GB free disk space<br>
+                    • Serial/USB ports or Ethernet adapter<br>
+                    • Screen resolution: 1280x1024 or higher
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Communication Interfaces</h2>
+                <ul>
+                    <li><strong>RS232/RS485:</strong> Traditional serial connection via front panel</li>
+                    <li><strong>Ethernet:</strong> TCP/IP connection for modern installations</li>
+                    <li><strong>IEC 61850:</strong> Substation automation protocol (DIGSI 5)</li>
+                    <li><strong>USB:</strong> Direct connection using USB-to-serial adapter</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="digsi4" class="content">
+            <div class="card">
+                <h2>DIGSI 4.87 Getting Started</h2>
+                
+                <h3>Installation Steps</h3>
+                <div class="step">
+                    <strong>Step 1:</strong> Download DIGSI 4.87 from Siemens website
+                </div>
+                <div class="step">
+                    <strong>Step 2:</strong> Run setup as Administrator
+                </div>
+                <div class="step">
+                    <strong>Step 3:</strong> Install required device libraries for your relay models
+                </div>
+                <div class="step">
+                    <strong>Step 4:</strong> Configure communication ports in Settings → Communication
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠ Important:</strong> Always backup existing relay settings before making changes. Use "Read Device" function first.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Creating a New Project</h2>
+                <div class="step">
+                    1. File → New → Select device type (e.g., 7SJ64)
+                </div>
+                <div class="step">
+                    2. Enter device identification and order number
+                </div>
+                <div class="step">
+                    3. Configure basic settings: rated voltage, rated current, CT/VT ratios
+                </div>
+                <div class="step">
+                    4. Set protection functions: overcurrent, distance, differential
+                </div>
+                <div class="step">
+                    5. Configure I/O signals and communication parameters
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Key Functions</h2>
+                <h3>Protection Settings</h3>
+                <ul>
+                    <li><strong>50/51:</strong> Overcurrent protection (phase and ground)</li>
+                    <li><strong>21:</strong> Distance protection (zone settings)</li>
+                    <li><strong>87:</strong> Differential protection</li>
+                    <li><strong>79:</strong> Auto-reclosing</li>
+                    <li><strong>27/59:</strong> Under/overvoltage protection</li>
+                </ul>
+                
+                <h3>CT/VT Configuration</h3>
+                <div class="code">
+                    Primary Current: 1000A<br>
+                    Secondary Current: 5A or 1A<br>
+                    CT Ratio: 1000/5 = 200<br>
+                    VT Ratio: 11000/110 = 100
+                </div>
+            </div>
+        </div>
+        
+        <div id="digsi5" class="content">
+            <div class="card">
+                <h2>DIGSI 5 Modern Interface</h2>
+                
+                <h3>Key Improvements</h3>
+                <ul>
+                    <li>Intuitive ribbon-based interface similar to Microsoft Office</li>
+                    <li>Enhanced graphical CFC (Continuous Function Chart) editor</li>
+                    <li>Built-in IEC 61850 system configurator</li>
+                    <li>Improved fault record visualization</li>
+                    <li>Multi-device project management</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Project Workflow</h2>
+                <div class="step">
+                    <strong>1. Device Configuration</strong><br>
+                    Home → New → Select SIPROTEC 5 device → Configure hardware variant
+                </div>
+                <div class="step">
+                    <strong>2. Parameter Settings</strong><br>
+                    Parameters tab → Configure protection functions → Set pickup values and time delays
+                </div>
+                <div class="step">
+                    <strong>3. CFC Programming</strong><br>
+                    CFC Editor → Create logic diagrams → Connect function blocks
+                </div>
+                <div class="step">
+                    <strong>4. IEC 61850 Configuration</strong><br>
+                    System configurator → Define data models → Configure GOOSE/MMS
+                </div>
+                <div class="step">
+                    <strong>5. Download to Device</strong><br>
+                    Online → Connect → Download configuration
+                </div>
+                
+                <div class="info">
+                    <strong>💡 Tip:</strong> Use the "Compare" function to check differences between online device settings and offline project files.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>CFC Editor Basics</h2>
+                <p>The Continuous Function Chart editor allows graphical programming of relay logic.</p>
+                
+                <h3>Common Function Blocks</h3>
+                <table>
+                    <tr>
+                        <th>Block</th>
+                        <th>Function</th>
+                    </tr>
+                    <tr>
+                        <td>AND</td>
+                        <td>Logical AND gate</td>
+                    </tr>
+                    <tr>
+                        <td>OR</td>
+                        <td>Logical OR gate</td>
+                    </tr>
+                    <tr>
+                        <td>TIMER</td>
+                        <td>Time delay functions</td>
+                    </tr>
+                    <tr>
+                        <td>FLIP-FLOP</td>
+                        <td>Set-reset logic</td>
+                    </tr>
+                    <tr>
+                        <td>COMPARATOR</td>
+                        <td>Analog value comparison</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div id="config" class="content">
+            <div class="card">
+                <h2>Essential Configuration Steps</h2>
+                
+                <h3>Communication Setup</h3>
+                <div class="step">
+                    <strong>Serial Connection:</strong><br>
+                    • Baud rate: 9600-115200 bps<br>
+                    • Data bits: 8<br>
+                    • Parity: None or Even<br>
+                    • Stop bits: 1
+                </div>
+                
+                <div class="step">
+                    <strong>Ethernet Connection:</strong><br>
+                    • IP Address: Set to match network (e.g., 192.168.1.10)<br>
+                    • Subnet Mask: 255.255.255.0<br>
+                    • Gateway: Network gateway IP<br>
+                    • Port: 102 (default for SIPROTEC)
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Protection Function Configuration</h2>
+                
+                <h3>Overcurrent Protection (50/51)</h3>
+                <div class="code">
+                    I> Pickup: 1.1 x Rated Current<br>
+                    I>> Pickup: 4-8 x Rated Current<br>
+                    I>>> Pickup: 10-20 x Rated Current<br>
+                    Time Delay: 0.1-30 seconds<br>
+                    Characteristic: Normal Inverse, Very Inverse, Extremely Inverse
+                </div>
+                
+                <h3>Distance Protection (21)</h3>
+                <div class="info">
+                    <strong>Zone 1:</strong> 80-85% of protected line (instantaneous)<br>
+                    <strong>Zone 2:</strong> 120-150% of protected line (0.3-0.5s delay)<br>
+                    <strong>Zone 3:</strong> Backup protection (0.8-1.5s delay)
+                </div>
+                
+                <h3>Auto-Reclosing (79)</h3>
+                <ul>
+                    <li>Dead time: 0.3-60 seconds</li>
+                    <li>Number of shots: 1-4</li>
+                    <li>Reclaim time: 10-300 seconds</li>
+                    <li>Synchronism check: Enable/disable</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Binary I/O Configuration</h2>
+                <table>
+                    <tr>
+                        <th>Input Type</th>
+                        <th>Typical Use</th>
+                    </tr>
+                    <tr>
+                        <td>Binary Input 1</td>
+                        <td>CB position status</td>
+                    </tr>
+                    <tr>
+                        <td>Binary Input 2</td>
+                        <td>Isolator position</td>
+                    </tr>
+                    <tr>
+                        <td>Binary Input 3-8</td>
+                        <td>External trip signals</td>
+                    </tr>
+                    <tr>
+                        <td>Trip Relay 1</td>
+                        <td>Main trip output</td>
+                    </tr>
+                    <tr>
+                        <td>Trip Relay 2</td>
+                        <td>Backup trip</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div id="testing" class="content">
+            <div class="card">
+                <h2>Relay Testing Procedures</h2>
+                
+                <h3>Pre-Commissioning Checks</h3>
+                <div class="step">
+                    1. Verify CT/VT polarity using phase rotation test
+                </div>
+                <div class="step">
+                    2. Check binary input status (CB, isolator positions)
+                </div>
+                <div class="step">
+                    3. Test trip circuit continuity
+                </div>
+                <div class="step">
+                    4. Verify communication with SCADA/substation controller
+                </div>
+                <div class="step">
+                    5. Review event logs for anomalies
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Primary Injection Testing</h2>
+                <div class="warning">
+                    <strong>⚠ Safety First:</strong> Always follow lockout/tagout procedures. Verify isolation before testing.
+                </div>
+                
+                <div class="step">
+                    <strong>Equipment Required:</strong><br>
+                    • Primary injection test set (500-2000A)<br>
+                    • Secondary injection test set (Omicron CMC, Megger SMRT)<br>
+                    • Multimeter and clamp meter<br>
+                    • Laptop with DIGSI software
+                </div>
+                
+                <h3>Overcurrent Test Procedure</h3>
+                <div class="step">
+                    1. Set relay to test mode (disable trip outputs)
+                </div>
+                <div class="step">
+                    2. Inject current at 1.1 x I> pickup setting
+                </div>
+                <div class="step">
+                    3. Verify relay detects and times correctly
+                </div>
+                <div class="step">
+                    4. Record actual vs. expected operating time
+                </div>
+                <div class="step">
+                    5. Repeat for I>> and I>>> elements
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Secondary Injection Testing</h2>
+                <p>Using test sets like Omicron CMC or Megger SMRT for precise relay testing.</p>
+                
+                <h3>Time-Overcurrent Curve Testing</h3>
+                <div class="code">
+                    Test Points (multiples of pickup):<br>
+                    1.5x, 2x, 3x, 5x, 10x, 20x<br>
+                    <br>
+                    Record operating time at each point<br>
+                    Compare with theoretical curve<br>
+                    Tolerance: ±5% of setting
+                </div>
+                
+                <h3>Directional Element Test</h3>
+                <ul>
+                    <li>Apply voltage and current with varying phase angles</li>
+                    <li>Verify correct direction detection</li>
+                    <li>Test at characteristic angle ±15°</li>
+                    <li>Check forward/reverse zones</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Fault Record Analysis</h2>
+                <p>DIGSI provides powerful tools for analyzing captured fault records.</p>
+                
+                <div class="step">
+                    <strong>Retrieving Fault Records:</strong><br>
+                    Online → Fault Records → Select event → Download
+                </div>
+                
+                <div class="info">
+                    <strong>Key Parameters to Check:</strong><br>
+                    • Pre-fault and fault current magnitudes<br>
+                    • Voltage sag/swell during fault<br>
+                    • Protection function operation sequence<br>
+                    • Trip time from fault inception<br>
+                    • Harmonic content (if available)
+                </div>
+            </div>
+        </div>
+        
+        <div id="iec61850" class="content">
+            <div class="card">
+                <h2>IEC 61850 Configuration</h2>
+                <p>IEC 61850 is the international standard for substation automation systems enabling interoperability between devices from different manufacturers.</p>
+                
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>Logical Nodes (LN):</strong> Standardized functions (XCBR for breaker, PDIF for differential)</li>
+                    <li><strong>Data Objects:</strong> Information within logical nodes</li>
+                    <li><strong>GOOSE:</strong> Generic Object Oriented Substation Event (fast peer-to-peer)</li>
+                    <li><strong>MMS:</strong> Manufacturing Message Specification (client-server communication)</li>
+                    <li><strong>SCL:</strong> Substation Configuration Language (XML configuration files)</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>SCL File Types</h2>
+                <table>
+                    <tr>
+                        <th>File Type</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>ICD</td>
+                        <td>IED Capability Description - device template</td>
+                    </tr>
+                    <tr>
+                        <td>CID</td>
+                        <td>Configured IED Description - configured device</td>
+                    </tr>
+                    <tr>
+                        <td>SCD</td>
+                        <td>Substation Configuration Description - complete system</td>
+                    </tr>
+                    <tr>
+                        <td>IID</td>
+                        <td>Instantiated IED Description - device with data values</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>GOOSE Configuration in DIGSI 5</h2>
+                
+                <div class="step">
+                    <strong>Step 1: Enable IEC 61850 Communication</strong><br>
+                    Settings → Communication → IEC 61850 → Enable
+                </div>
+                
+                <div class="step">
+                    <strong>Step 2: Configure GOOSE Publisher</strong><br>
+                    • System Configurator → GOOSE → New GOOSE message<br>
+                    • Set GOOSE name (e.g., "TRIP_BREAKER_1")<br>
+                    • Define AppID (unique identifier)<br>
+                    • Set VLAN priority and VID if used<br>
+                    • Select data to publish (e.g., trip signals)
+                </div>
+                
+                <div class="step">
+                    <strong>Step 3: Configure GOOSE Subscriber</strong><br>
+                    • Add subscription to receive GOOSE from other devices<br>
+                    • Map received data to internal signals<br>
+                    • Configure timeout values (typically 2x normal interval)
+                </div>
+                
+                <div class="info">
+                    <strong>GOOSE Timing Parameters:</strong><br>
+                    • T0: Time to first transmission (1-2 ms typical)<br>
+                    • T1: Fast transmission interval (4 ms typical)<br>
+                    • T2: Normal steady-state interval (1000 ms typical)<br>
+                    • TimeAllowedtoLive: Supervision timeout (2x T2 typical)
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Common Logical Nodes</h2>
+                <table>
+                    <tr>
+                        <th>Logical Node</th>
+                        <th>Function</th>
+                    </tr>
+                    <tr>
+                        <td>XCBR</td>
+                        <td>Circuit Breaker control</td>
+                    </tr>
+                    <tr>
+                        <td>XSWI</td>
+                        <td>Switch/Disconnector control</td>
+                    </tr>
+                    <tr>
+                        <td>PDIF</td>
+                        <td>Differential protection</td>
+                    </tr>
+                    <tr>
+                        <td>PDIS</td>
+                        <td>Distance protection</td>
+                    </tr>
+                    <tr>
+                        <td>PTOC</td>
+                        <td>Time overcurrent protection</td>
+                    </tr>
+                    <tr>
+                        <td>MMXU</td>
+                        <td>Measurement values</td>
+                    </tr>
+                    <tr>
+                        <td>RREC</td>
+                        <td>Auto-reclosing</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>MMS Client-Server Setup</h2>
+                <p>MMS enables SCADA systems to read/write data and control the relay.</p>
+                
+                <div class="step">
+                    <strong>Configuration Steps:</strong><br>
+                    1. Set IED name (must match SCL file)<br>
+                    2. Configure IP address and subnet<br>
+                    3. Enable MMS server in communication settings<br>
+                    4. Set access control and passwords<br>
+                    5. Configure report control blocks for event reporting
+                </div>
+                
+                <h3>Report Control Blocks (RCB)</h3>
+                <ul>
+                    <li><strong>Buffered RCB:</strong> Stores events when connection lost</li>
+                    <li><strong>Unbuffered RCB:</strong> Real-time reporting only</li>
+                    <li><strong>Trigger Options:</strong> Data change, quality change, data update, integrity</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Substation Topology Configuration</h2>
+                <div class="code">
+                    Substation → Voltage Level → Bay → Device<br>
+                    <br>
+                    Example:<br>
+                    Main_Station → 132kV → Feeder_01 → SIPROTEC_7SJ86
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠ Important:</strong> Consistent naming conventions across all IEDs is critical. Use descriptive names that match single-line diagrams.
+                </div>
+            </div>
+        </div>
+        
+        <div id="comtrade" class="content">
+            <div class="card">
+                <h2>COMTRADE File Analysis</h2>
+                <p>COMTRADE (Common Format for Transient Data Exchange) is the IEEE standard for fault record data exchange.</p>
+                
+                <h3>File Structure</h3>
+                <ul>
+                    <li><strong>.cfg:</strong> Configuration file (channel names, units, scaling)</li>
+                    <li><strong>.dat:</strong> Data file (actual waveform samples)</li>
+                    <li><strong>.hdr:</strong> Header file (optional, additional info)</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Retrieving Fault Records from DIGSI</h2>
+                
+                <div class="step">
+                    <strong>DIGSI 4:</strong><br>
+                    Online → Fault Records → Select event → Right-click → Export as COMTRADE
+                </div>
+                
+                <div class="step">
+                    <strong>DIGSI 5:</strong><br>
+                    Online → Recordings → Fault Records → Select → Export → COMTRADE format
+                </div>
+                
+                <div class="info">
+                    <strong>💡 Tip:</strong> Export multiple events at once for trending analysis. Create separate folders for each protection zone or device.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Waveform Analysis Techniques</h2>
+                
+                <h3>Key Parameters to Examine</h3>
+                <table>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>What to Look For</th>
+                    </tr>
+                    <tr>
+                        <td>Pre-fault Current</td>
+                        <td>Load conditions before fault</td>
+                    </tr>
+                    <tr>
+                        <td>Fault Inception</td>
+                        <td>Exact moment fault begins</td>
+                    </tr>
+                    <tr>
+                        <td>Fault Current Magnitude</td>
+                        <td>Peak and RMS values</td>
+                    </tr>
+                    <tr>
+                        <td>Voltage Sag</td>
+                        <td>Depth and duration of voltage drop</td>
+                    </tr>
+                    <tr>
+                        <td>DC Offset</td>
+                        <td>Asymmetrical component</td>
+                    </tr>
+                    <tr>
+                        <td>Fault Clearing Time</td>
+                        <td>From inception to current zero</td>
+                    </tr>
+                </table>
+                
+                <h3>Fault Type Identification</h3>
+                <div class="step">
+                    <strong>Single Line-to-Ground (L-G):</strong><br>
+                    • One phase current increases significantly<br>
+                    • Ground current appears<br>
+                    • Affected phase voltage drops to near zero<br>
+                    • Other phases show minimal voltage rise
+                </div>
+                
+                <div class="step">
+                    <strong>Line-to-Line (L-L):</strong><br>
+                    • Two phase currents increase equally (opposite polarity)<br>
+                    • No ground current<br>
+                    • Both affected phase voltages drop<br>
+                    • Third phase unaffected
+                </div>
+                
+                <div class="step">
+                    <strong>Three-Phase (3φ):</strong><br>
+                    • All three phase currents increase equally<br>
+                    • Balanced fault (symmetrical)<br>
+                    • All phase voltages collapse<br>
+                    • Highest fault current magnitude
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Advanced Analysis Features</h2>
+                
+                <h3>Harmonic Analysis</h3>
+                <p>Use FFT (Fast Fourier Transform) to identify harmonic content during faults.</p>
+                <ul>
+                    <li><strong>2nd Harmonic:</strong> Indicates transformer inrush (not a fault)</li>
+                    <li><strong>3rd Harmonic:</strong> Common in ground faults</li>
+                    <li><strong>5th/7th Harmonic:</strong> Power electronics, VFDs</li>
+                </ul>
+                
+                <h3>Sequence Component Analysis</h3>
+                <div class="code">
+                    Positive Sequence (I1): Normal balanced load<br>
+                    Negative Sequence (I2): Unbalanced faults (L-L)<br>
+                    Zero Sequence (I0): Ground faults (L-G)
+                </div>
+                
+                <div class="info">
+                    <strong>Fault Type Detection:</strong><br>
+                    • L-G fault: I0 present, I2 moderate<br>
+                    • L-L fault: I2 high, I0 absent<br>
+                    • 3φ fault: Only I1 present
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Post-Fault Diagnostics Workflow</h2>
+                
+                <div class="step">
+                    1. <strong>Retrieve fault record</strong> from relay immediately after event
+                </div>
+                <div class="step">
+                    2. <strong>Check event log</strong> for protection function operation sequence
+                </div>
+                <div class="step">
+                    3. <strong>Analyze waveforms</strong> to identify fault type and location
+                </div>
+                <div class="step">
+                    4. <strong>Calculate fault current</strong> and compare with expected values
+                </div>
+                <div class="step">
+                    5. <strong>Verify protection operation</strong> was correct and selective
+                </div>
+                <div class="step">
+                    6. <strong>Generate report</strong> with findings and recommendations
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠ Common Issues to Check:</strong><br>
+                    • CT saturation (distorted current waveform)<br>
+                    • VT fuse blown (voltage missing on one phase)<br>
+                    • Incorrect CT polarity (current phase shift)<br>
+                    • Protection misoperation (wrong element tripped)
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>COMTRADE Viewing Tools</h2>
+                <ul>
+                    <li><strong>DIGSI Integrated Viewer:</strong> Built-in oscillography viewer</li>
+                    <li><strong>PQView:</strong> Advanced power quality analysis</li>
+                    <li><strong>Comtrade Viewer:</strong> Free standalone viewers available online</li>
+                    <li><strong>MATLAB:</strong> For custom analysis and automation</li>
+                    <li><strong>Python Libraries:</strong> comtrade package for programming analysis</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="logic" class="content">
+            <div class="card">
+                <h2>CFC Logic Programming Examples</h2>
+                <p>Practical logic schemes commonly implemented in SIPROTEC relays using CFC (Continuous Function Chart).</p>
+            </div>
+            
+            <div class="card">
+                <h2>1. Bus-Tie Interlocking Scheme</h2>
+                <p>Prevents closing bus-tie breaker when both sources are energized with out-of-sync conditions.</p>
+                
+                <div class="code">
+                    Logic Flow:<br>
+                    ┌─────────────────────────────────┐<br>
+                    │ Bus1_Voltage_OK    AND Gate     │<br>
+                    │ Bus2_Voltage_OK  ─────→ Output │<br>
+                    │ Sync_Check_OK                   │<br>
+                    └─────────────────────────────────┘<br>
+                    Output → Bus_Tie_Close_Enable
+                </div>
+                
+                <h3>CFC Implementation</h3>
+                <div class="step">
+                    1. Create binary inputs for Bus1_OK, Bus2_OK<br>
+                    2. Add SYNCHK function block (synchronism check)<br>
+                    3. Configure voltage limits (±10%), frequency (±0.2 Hz), angle (±20°)<br>
+                    4. Use 3-input AND gate to combine conditions<br>
+                    5. Output to close permit relay
+                </div>
+                
+                <div class="info">
+                    <strong>Settings:</strong><br>
+                    • Voltage difference: ±10% of nominal<br>
+                    • Frequency difference: ±0.2 Hz<br>
+                    • Phase angle: ±20°<br>
+                    • Dead bus bypass: Enable (allow close if one bus dead)
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>2. Automatic Transfer Scheme (ATS)</h2>
+                <p>Automatically transfers load from failed source to alternate source.</p>
+                
+                <div class="code">
+                    Sequence:<br>
+                    Source1_Fail → Delay 0.5s → Trip CB1 →<br>
+                    Delay 1.0s → Close CB2 (if Source2_OK)
+                </div>
+                
+                <h3>CFC Components</h3>
+                <div class="step">
+                    1. <strong>Source monitoring:</strong> Undervoltage elements (27)<br>
+                    2. <strong>Timer 1:</strong> Dropout delay (0.5s) before tripping CB1<br>
+                    3. <strong>Timer 2:</strong> Dead-time delay (1.0s) before closing CB2<br>
+                    4. <strong>SR Flip-Flop:</strong> Maintain transfer state<br>
+                    5. <strong>AND gates:</strong> Combine permissive conditions
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠ Critical Checks:</strong><br>
+                    • Verify source 2 is available before transfer<br>
+                    • Ensure CB1 is fully open before closing CB2<br>
+                    • Prevent rapid re-transfer (add time delay)<br>
+                    • Include manual override capability
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>3. Load Shedding Scheme</h2>
+                <p>Automatically shed non-critical loads during underfrequency or overload conditions.</p>
+                
+                <h3>Multi-Stage Load Shedding</h3>
+                <table>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Frequency</th>
+                        <th>Delay</th>
+                        <th>Load %</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>59.5 Hz</td>
+                        <td>0.3s</td>
+                        <td>10%</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>59.0 Hz</td>
+                        <td>0.3s</td>
+                        <td>15%</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>58.5 Hz</td>
+                        <td>0.2s</td>
+                        <td>20%</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>58.0 Hz</td>
+                        <td>0.1s</td>
+                        <td>25%</td>
+                    </tr>
+                </table>
+                
+                <h3>CFC Logic</h3>
+                <div class="step">
+                    1. Use COMPARATOR blocks to detect frequency levels<br>
+                    2. Add independent TIMER for each stage<br>
+                    3. Use SR flip-flop to latch trip command<br>
+                    4. Include frequency restoration logic (reset at 59.8 Hz)<br>
+                    5. Add manual load restoration capability
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>4. Breaker Failure Protection</h2>
+                <p>Backup protection when circuit breaker fails to clear fault.</p>
+                
+                <div class="code">
+                    Logic:<br>
+                    Trip_Command AND Current_Still_Present<br>
+                    → Start Timer (150ms typical)<br>
+                    → Timer Expires → Trip Adjacent Breakers
+                </div>
+                
+                <h3>Implementation Steps</h3>
+                <div class="step">
+                    1. Monitor trip command from protection functions<br>
+                    2. Check if fault current persists after trip<br>
+                    3. Start breaker failure timer (100-200ms)<br>
+                    4. If current still present when timer expires → trip backup<br>
+                    5. Send trip to adjacent breakers (zone 2 backup)
+                </div>
+                
+                <div class="info">
+                    <strong>Current Supervision:</strong><br>
+                    Set pickup at 25-50% of minimum fault current to ensure detection while avoiding misoperation during load conditions.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>5. Anti-Pumping Logic</h2>
+                <p>Prevents repeated close attempts when fault is still present.</p>
+                
+                <div class="code">
+                    IF (Close_Command AND Trip_Condition_Active)<br>
+                    THEN Block_Close<br>
+                    UNTIL Trip_Condition_Cleared
+                </div>
+                
+                <h3>CFC Design</h3>
+                <div class="step">
+                    1. Monitor all trip signals (protection + manual)<br>
+                    2. Use OR gate to combine all trip sources<br>
+                    3. Set flip-flop on any trip<br>
+                    4. Block close command while flip-flop set<br>
+                    5. Reset only when trip condition clears
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>6. Voltage-Controlled Overcurrent</h2>
+                <p>Increase sensitivity of overcurrent protection during low voltage conditions.</p>
+                
+                <div class="step">
+                    <strong>Logic Concept:</strong><br>
+                    Normal: I> = 1.2 x Rated Current<br>
+                    Low Voltage (&lt;85%): I> = 0.8 x Rated Current
+                </div>
+                
+                <h3>CFC Implementation</h3>
+                <div class="step">
+                    1. Use COMPARATOR to detect voltage &lt; 85%<br>
+                    2. Create two overcurrent elements with different settings<br>
+                    3. Use MUX (multiplexer) to select active element based on voltage<br>
+                    4. Route selected output to trip logic
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>CFC Best Practices</h2>
+                <ul>
+                    <li>Use clear, descriptive names for all signals and blocks</li>
+                    <li>Group related logic in separate CFC charts</li>
+                    <li>Add comments explaining complex logic sequences</li>
+                    <li>Test in simulation mode before downloading</li>
+                    <li>Document all custom logic in commissioning reports</li>
+                    <li>Use consistent color coding for different signal types</li>
+                    <li>Minimize crossing wires for readability</li>
+                    <li>Always include manual override for automatic functions</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="protocols" class="content">
+            <div class="card">
+                <h2>Communication Protocols Overview</h2>
+                <p>SIPROTEC relays support multiple communication protocols for integration with SCADA and substation automation systems.</p>
+                
+                <table>
+                    <tr>
+                        <th>Protocol</th>
+                        <th>Type</th>
+                        <th>Speed</th>
+                        <th>Application</th>
+                    </tr>
+                    <tr>
+                        <td>IEC 61850</td>
+                        <td>Ethernet</td>
+                        <td>100 Mbps</td>
+                        <td>Modern substation automation</td>
+                    </tr>
+                    <tr>
+                        <td>Modbus RTU</td>
+                        <td>Serial</td>
+                        <td>9600-115200 bps</td>
+                        <td>Industrial control, legacy systems</td>
+                    </tr>
+                    <tr>
+                        <td>Modbus TCP</td>
+                        <td>Ethernet</td>
+                        <td>100 Mbps</td>
+                        <td>Ethernet-based Modbus</td>
+                    </tr>
+                    <tr>
+                        <td>DNP3</td>
+                        <td>Serial/Ethernet</td>
+                        <td>9600+ bps</td>
+                        <td>Utility SCADA (North America)</td>
+                    </tr>
+                    <tr>
+                        <td>IEC 60870-5-103</td>
+                        <td>Serial</td>
+                        <td>9600-19200 bps</td>
+                        <td>Protection relay communication</td>
+                    </tr>
+                    <tr>
+                        <td>IEC 60870-5-104</td>
+                        <td>Ethernet</td>
+                        <td>100 Mbps</td>
+                        <td>Telecontrol (Europe, Asia)</td>
+                    </tr>
+                    <tr>
+                        <td>PROFIBUS</td>
+                        <td>Serial</td>
+                        <td>9.6K-12M bps</td>
+                        <td>Process automation</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>Modbus RTU Configuration</h2>
+                <p>Simple and widely used protocol for reading/writing relay data.</p>
+                
+                <h3>Serial Port Setup in DIGSI</h3>
+                <div class="step">
+                    Settings → Communication → Modbus RTU<br>
+                    • Slave Address: 1-247 (unique per device)<br>
+                    • Baud Rate: 9600, 19200, 38400, 57600, 115200<br>
+                    • Parity: None, Even, Odd<br>
+                    • Stop Bits: 1 or 2<br>
+                    • Response Timeout: 1000 ms typical
+                </div>
+                
+                <h3>Common Modbus Function Codes</h3>
+                <table>
+                    <tr>
+                        <th>Function Code</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>01</td>
+                        <td>Read Coils (digital outputs)</td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>Read Discrete Inputs (digital inputs)</td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>Read Holding Registers (analog values)</td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>Read Input Registers (measurements)</td>
+                    </tr>
+                    <tr>
+                        <td>05</td>
+                        <td>Write Single Coil (control output)</td>
+                    </tr>
+                    <tr>
+                        <td>06</td>
+                        <td>Write Single Register (set value)</td>
+                    </tr>
+                    <tr>
+                        <td>16</td>
+                        <td>Write Multiple Registers</td>
+                    </tr>
+                </table>
+                
+                <h3>Register Mapping Example</h3>
+                <div class="code">
+                    Voltage L1-N:    Register 4000-4001 (float32)<br>
+                    Current L1:      Register 4010-4011 (float32)<br>
+                    Active Power:    Register 4020-4021 (float32)<br>
+                    Trip Status:     Register 5000 (bit0 = trip)<br>
+                    CB Position:     Register 5001 (0=open, 1=close)
+                </div>
+                
+                <div class="info">
+                    <strong>💡 Note:</strong> Register addresses are device-specific. Always refer to the relay's Modbus register map in the technical manual.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>DNP3 Configuration</h2>
+                <p>Distributed Network Protocol - common in North American utilities.</p>
+                
+                <h3>DNP3 Setup Parameters</h3>
+                <div class="step">
+                    Settings → Communication → DNP3<br>
+                    • Station Address: 1-65519<br>
+                    • Master Address: Typically 1<br>
+                    • Application Layer Timeout: 5000 ms<br>
+                    • Link Layer Timeout: 1000 ms<br>
+                    • Fragment Size: 2048 bytes typical
+                </div>
+                
+                <h3>DNP3 Data Types</h3>
+                <ul>
+                    <li><strong>Binary Input (BI):</strong> Status points (CB open/close, trip)</li>
+                    <li><strong>Binary Output (BO):</strong> Control points (trip/close commands)</li>
+                    <li><strong>Analog Input (AI):</strong> Measurements (voltage, current, power)</li>
+                    <li><strong>Counter:</strong> Energy, pulse counts</li>
+                </ul>
+                
+                <h3>Unsolicited Responses</h3>
+                <div class="info">
+                    Enable unsolicited responses for critical alarms and trips:<br>
+                    • Class 1: High priority (trips, alarms)<br>
+                    • Class 2: Medium priority (status changes)<br>
+                    • Class 3: Low priority (measurements)<br>
+                    <br>
+                    Unsolicited responses enable faster alarm notification without polling.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>IEC 60870-5-103 Configuration</h2>
+                <p>Protection-specific protocol common in Europe and Asia.</p>
+                
+                <div class="step">
+                    Settings → Communication → IEC 103<br>
+                    • Device Address: 1-254<br>
+                    • Common Address: Network identifier<br>
+                    • Baud Rate: 9600 or 19200 typical<br>
+                    • Time Synchronization: Enable/Disable
+                </div>
+                
+                <h3>ASDU Types (Application Service Data Units)</h3>
+                <table>
+                    <tr>
+                        <th>ASDU</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Time-tagged message</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Time-tagged message with relative time</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Termination of general interrogation</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td>Measured values</td>
+                    </tr>
+                    <tr>
+                        <td>21</td>
+                        <td>General interrogation</td>
+                    </tr>
+                    <tr>
+                        <td>23</td>
+                        <td>List of recorded disturbances</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>IEC 60870-5-104 Configuration</h2>
+                <p>TCP/IP version of IEC 101/103 protocol.</p>
+                
+                <h3>Network Configuration</h3>
+                <div class="step">
+                    Settings → Communication → IEC 104<br>
+                    • IP Address: Device IP (e.g., 192.168.1.50)<br>
+                    • Port: 2404 (standard)<br>
+                    • Common Address: 1-65535<br>
+                    • K value: 12 (max unacknowledged messages)<br>
+                    • W value: 8 (acknowledgment threshold)
+                </div>
+                
+                <h3>Connection Modes</h3>
+                <ul>
+                    <li><strong>Balanced Mode:</strong> Both devices can initiate connection (typical)</li>
+                    <li><strong>Unbalanced Mode:
+            <div class="card">
+                <h2>Common Issues & Solutions</h2>
+                
+                <h3>Communication Problems</h3>
+                <div class="warning">
+                    <strong>Issue:</strong> Cannot connect to relay<br>
+                    <strong>Solutions:</strong><br>
+                    • Verify COM port settings match relay configuration<br>
+                    • Check cable connections (pinout for RS232: 2-3, 3-2, 5-5)<br>
+                    • Disable antivirus/firewall temporarily<br>
+                    • Try different USB-to-serial adapter<br>
+                    • Reset relay communication parameters to default
+                </div>
+                
+                <div class="warning">
+                    <strong>Issue:</strong> Ethernet connection timeout<br>
+                    <strong>Solutions:</strong><br>
+                    • Ping relay IP address from command prompt<br>
+                    • Check network cable and switch ports<br>
+                    • Verify IP address, subnet mask, gateway<br>
+                    • Ensure firewall allows port 102<br>
+                    • Check for IP conflicts on network
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Configuration Issues</h2>
+                
+                <div class="warning">
+                    <strong>Issue:</strong> Settings won't download to device<br>
+                    <strong>Solutions:</strong><br>
+                    • Check if relay is in correct operating mode<br>
+                    • Verify firmware version compatibility<br>
+                    • Disable password protection if enabled<br>
+                    • Try uploading from device first, then modify and download<br>
+                    • Restart DIGSI software and try again
+                </div>
+                
+                <div class="warning">
+                    <strong>Issue:</strong> CFC logic not executing properly<br>
+                    <strong>Solutions:</strong><br>
+                    • Verify all function block connections<br>
+                    • Check for unconnected inputs (may need default values)<br>
+                    • Review execution order of function blocks<br>
+                    • Test logic offline in simulation mode<br>
+                    • Check for conflicting signal assignments
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Relay Operation Issues</h2>
+                
+                <h3>Unwanted Tripping</h3>
+                <div class="info">
+                    <strong>Diagnostic Steps:</strong><br>
+                    1. Review fault records and event logs<br>
+                    2. Check if trip was from protection function or external signal<br>
+                    3. Verify CT/VT inputs are correct (no open circuits)<br>
+                    4. Analyze pre-fault and fault conditions<br>
+                    5. Check for incorrect settings or logic programming
+                </div>
+                
+                <h3>Failure to Trip</h3>
+                <div class="info">
+                    <strong>Diagnostic Steps:</strong><br>
+                    1. Verify protection function is enabled<br>
+                    2. Check CT/VT input signals are present<br>
+                    3. Test trip circuit continuity<br>
+                    4. Review pickup and time delay settings<br>
+                    5. Check if relay detected fault (event log)<br>
+                    6. Verify trip logic in CFC (if applicable)
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Best Practices</h2>
+                <ul>
+                    <li>Always create backups before modifying settings</li>
+                    <li>Document all changes with date, time, and engineer name</li>
+                    <li>Use version control for project files</li>
+                    <li>Test in offline mode before downloading to device</li>
+                    <li>Maintain updated firmware on all devices</li>
+                    <li>Regular preventive maintenance and testing</li>
+                    <li>Keep DIGSI software updated to latest stable version</li>
+                    <li>Maintain a library of standard settings for common applications</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Useful Resources</h2>
+                <div class="info">
+                    <strong>Siemens Support:</strong><br>
+                    • Technical Support Portal: support.industry.siemens.com<br>
+                    • Product Manuals: Download from Siemens website<br>
+                    • Training: Siemens offers SIPROTEC courses<br>
+                    • Community Forums: Active user discussions<br>
+                    <br>
+                    <strong>Quick Reference:</strong><br>
+                    • IEC 60255: Protection relay standards<br>
+                    • IEEE C37: Power system protection guides<br>
+                    • Local utility protection coordination guidelines
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all content
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
